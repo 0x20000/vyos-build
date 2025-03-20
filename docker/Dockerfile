@@ -54,10 +54,11 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 RUN /bin/echo -e 'APT::Install-Recommends "0";\nAPT::Install-Suggests "0";' > /etc/apt/apt.conf.d/01norecommends
 
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
       dialog \
       apt-utils \
-      locales
+      locales \
+      && rm -rf /var/lib/apt/lists/*
 
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && locale-gen
 ENV LANG=en_US.utf8
@@ -65,7 +66,7 @@ ENV LANG=en_US.utf8
 ENV OCAML_VERSION=4.14.2
 
 # Base packaged needed to build packages and their package dependencies
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
       bash \
       bash-completion \
       vim \
@@ -88,10 +89,11 @@ RUN apt-get update && apt-get install -y \
       po4a \
       openssh-client \
       jq \
-      socat
+      socat \
+      && rm -rf /var/lib/apt/lists/*
 
 # Packages needed for vyos-build
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
       build-essential \
       python3-pystache \
       squashfs-tools \
@@ -109,24 +111,27 @@ RUN apt-get update && apt-get install -y \
       live-build \
       gdisk \
       sbsigntool \
-      dosfstools
+      dosfstools \
+      && rm -rf /var/lib/apt/lists/*
 
 # Packages for TPM test
-RUN apt-get update && apt-get install -y swtpm
+RUN apt-get update && apt-get install -y --no-install-recommends swtpm && rm -rf /var/lib/apt/lists/*
 
 # Syslinux and Grub2 is only supported on x86 and x64 systems
 RUN if dpkg-architecture -ii386 || dpkg-architecture -iamd64; then \
-      apt-get update && apt-get install -y \
+      apt-get update && apt-get install -y --no-install-recommends \
         syslinux \
         grub2; \
+        && rm -rf /var/lib/apt/lists/*; \
     fi
 
 # Building libvyosconf requires a full configured OPAM/OCaml setup
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
       debhelper \
       libffi-dev \
       libpcre3-dev \
-      unzip
+      unzip \
+      && rm -rf /var/lib/apt/lists/*
 
 # Update certificate store to not crash ocaml package install
 # Apply fix for https in curl running on armhf
@@ -155,14 +160,16 @@ RUN eval $(opam env --root=/opt/opam --set-root) && opam install -y \
       xml-light
 
 # Packages needed for libvyosconfig
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
       quilt \
       libpcre3-dev \
-      libffi-dev
+      libffi-dev \
+      && rm -rf /var/lib/apt/lists/*
 
 # Packages needed for open-vmdk
-RUN apt-get update && apt-get install -y \
-      zlib1g-dev
+RUN apt-get update && apt-get install -y --no-install-recommends \
+      zlib1g-dev \
+      && rm -rf /var/lib/apt/lists/*
 
 # Install open-vmdk
 RUN wget -O /tmp/open-vmdk-master.zip https://github.com/vmware/open-vmdk/archive/master.zip && \
@@ -170,8 +177,9 @@ RUN wget -O /tmp/open-vmdk-master.zip https://github.com/vmware/open-vmdk/archiv
     cd /tmp/open-vmdk-master/ && make && make install
 
 # Packages need for build live-build
-RUN apt-get update && apt-get install -y \
-      cpio
+RUN apt-get update && apt-get install -y --no-install-recommends \
+      cpio \
+      && rm -rf /var/lib/apt/lists/*
 
 COPY patches/live-build/0001-save-package-info.patch /tmp/0001-save-package-info.patch
 
@@ -199,7 +207,7 @@ RUN wget https://salsa.debian.org/klausenbusk-guest/debootstrap/commit/a9a603b17
 
 # Packages needed for Linux Kernel
 # cmake required by accel-ppp
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
       cmake \
       gnupg2 \
       rsync \
@@ -213,25 +221,27 @@ RUN apt-get update && apt-get install -y \
       python-is-python3 \
       dwarves \
       nasm \
-      rdfind
+      rdfind \
+      && rm -rf /var/lib/apt/lists/*
 
 # Packages needed for Intel QAT out-of-tree drivers
 # FPM is used when generation Debian pckages for e.g. Intel QAT drivers
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
       pciutils \
       yasm \
       ruby \
       libudev-dev \
       ruby-dev \
       rubygems \
-      build-essential
+      build-essential \
+      && rm -rf /var/lib/apt/lists/*
 RUN gem install --no-document fpm
 
 # Packages needed for vyos-1x
 RUN pip install --break-system-packages \
       git+https://github.com/aristanetworks/j2lint.git@341b5d5db86 \
       pyhumps==3.8.0; \
-    apt-get update && apt-get install -y \
+    apt-get update && apt-get install -y --no-install-recommends \
       dh-python \
       fakeroot \
       iproute2 \
@@ -260,7 +270,8 @@ RUN pip install --break-system-packages \
       pylint \
       quilt \
       whois \
-      python3-cracklib
+      python3-cracklib \
+      && rm -rf /var/lib/apt/lists/*
 
 # Go required for telegraf and prometheus exporters build
 RUN GO_VERSION_INSTALL="1.23.2" ; \
@@ -272,27 +283,29 @@ RUN echo "export PATH=/opt/go/bin:$PATH" >> /etc/bash.bashrc
 # Packages needed for Qemu test-suite
 # This is for now only supported on i386 and amd64 platforms
 RUN if dpkg-architecture -ii386 || dpkg-architecture -iamd64; then \
-      apt-get update && apt-get install -y \
+      apt-get update && apt-get install -y --no-install-recommends \
         python3-pexpect \
         ovmf \
         qemu-system-x86 \
         qemu-utils \
-        qemu-kvm; \
+        qemu-kvm; \ 
+        && rm -rf /var/lib/apt/lists/* ; \
     fi
 
 # Packages needed for building vmware and GCE images
 # This is only supported on i386 and amd64 platforms
 RUN if dpkg-architecture -ii386 || dpkg-architecture -iamd64; then \
-     apt-get update && apt-get install -y \
+     apt-get update && apt-get install -y --no-install-recommends \
       kpartx \
       parted \
       udev \
       grub-pc \
       grub2-common; \
+      && rm -rf /var/lib/apt/lists/*; \
     fi
 
 # Packages needed for vyos-cloud-init
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
       python3-configobj \
       python3-httpretty \
       python3-jsonpatch \
@@ -306,28 +319,31 @@ RUN apt-get update && apt-get install -y \
       python3-jsonschema \
       python3-contextlib2 \
       python3-pytest-cov \
-      cloud-utils
+      cloud-utils \
+      && rm -rf /var/lib/apt/lists/*
 
 # Install utillities for building grub and u-boot images
 RUN if dpkg-architecture -iarm64; then \
-    apt-get update && apt-get install -y \
+    apt-get update && apt-get install -y --no-install-recommends \
       dosfstools \
       u-boot-tools \
       grub-efi-$(dpkg-architecture -qDEB_HOST_ARCH); \
     elif dpkg-architecture -iarmhf; then \
-    apt-get update && apt-get install -y \
+    apt-get update && apt-get install -y --no-install-recommends \
     # Packages needed in build-image script
       kpartx \  
       dosfstools \
       u-boot-tools \
       grub-efi-arm; \
-    fi
+    fi \
+    && rm -rf /var/lib/apt/lists/*
 
 # Packages needed for openvpn-otp
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
       debhelper \
       libssl-dev \
-      openvpn
+      openvpn \
+      && rm -rf /var/lib/apt/lists/*
 
 # Packages needed for OWAMP/TWAMP (service sla)
 RUN git clone -b 4.4.6 https://github.com/perfsonar/i2util.git /tmp/i2util && \
@@ -336,34 +352,39 @@ RUN git clone -b 4.4.6 https://github.com/perfsonar/i2util.git /tmp/i2util && \
       dpkg -i /tmp/*i2util*_$(dpkg-architecture -qDEB_HOST_ARCH).deb
 
 # Creating image for embedded systems needs this utilities to prepare a image file
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
       parted \
       udev \
-      zip
+      zip \
+      && rm -rf /var/lib/apt/lists/*
 
 # Packages needed for Accel-PPP
 # XXX: please note that this must be installed after nftable dependencies - otherwise
 # APT will remove liblua5.3-dev which breaks the Accel-PPP build
 # With bookworm, updated to libssl3 (Note: https://github.com/accel-ppp/accel-ppp/issues/68)
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
       liblua5.3-dev \
       libssl3 \
       libssl-dev \
-      libpcre3-dev
+      libpcre3-dev \
+      && rm -rf /var/lib/apt/lists/*
 
 # debmake: a native Debian tool for preparing sources for packaging
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
       debmake \
-      python3-debian
+      python3-debian \
+      && rm -rf /var/lib/apt/lists/*
 
 # Packages for jool
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
       libnl-genl-3-dev \
-      libxtables-dev
+      libxtables-dev \
+      && rm -rf /var/lib/apt/lists/*
 
 # Packages needed for nftables
-RUN apt-get update && apt-get install -y \
-      asciidoc-base
+RUN apt-get update && apt-get install -y --no-install-recommends \
+      asciidoc-base \
+      && rm -rf /var/lib/apt/lists/*
 
 # Allow password-less 'sudo' for all users in group 'sudo'
 RUN sed "s/^%sudo.*/%sudo\tALL=(ALL) NOPASSWD:ALL/g" -i /etc/sudoers && \
