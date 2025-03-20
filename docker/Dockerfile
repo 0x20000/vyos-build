@@ -122,7 +122,7 @@ RUN if dpkg-architecture -ii386 || dpkg-architecture -iamd64; then \
       apt-get update && apt-get install -y --no-install-recommends \
         syslinux \
         grub2; \
-        && rm -rf /var/lib/apt/lists/*; \
+        rm -rf /var/lib/apt/lists/*; \
     fi
 
 # Building libvyosconf requires a full configured OPAM/OCaml setup
@@ -289,7 +289,7 @@ RUN if dpkg-architecture -ii386 || dpkg-architecture -iamd64; then \
         qemu-system-x86 \
         qemu-utils \
         qemu-kvm; \ 
-        && rm -rf /var/lib/apt/lists/* ; \
+        rm -rf /var/lib/apt/lists/* ; \
     fi
 
 # Packages needed for building vmware and GCE images
@@ -301,7 +301,7 @@ RUN if dpkg-architecture -ii386 || dpkg-architecture -iamd64; then \
       udev \
       grub-pc \
       grub2-common; \
-      && rm -rf /var/lib/apt/lists/*; \
+      rm -rf /var/lib/apt/lists/*; \
     fi
 
 # Packages needed for vyos-cloud-init
