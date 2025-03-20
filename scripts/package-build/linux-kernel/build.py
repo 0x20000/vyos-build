@@ -131,10 +131,12 @@ def build_package(package: dict, dependencies: list) -> None:
             create_tarball(f'{package["name"]}-{package["commit_id"]}', f'{package["name"]}')
         elif package['build_cmd'] == 'build_intel_qat':
             build_intel_qat()
+        elif package['build_cmd'] == 'build_intel_igb':
+            build_intel(package['name'], package['commit_id'], package['scm_url'])
         elif package['build_cmd'] == 'build_intel_ixgbe':
-            build_intel_ixgbe()
+            build_intel(package['name'], package['commit_id'], package['scm_url'])
         elif package['build_cmd'] == 'build_intel_ixgbevf':
-            build_intel_ixgbevf()
+            build_intel(package['name'], package['commit_id'], package['scm_url'])
         elif package['build_cmd'] == 'build_mellanox_ofed':
             build_mellanox_ofed()
         elif package['build_cmd'] == 'build_realtek_r8152':
@@ -215,14 +217,11 @@ def build_intel_qat():
     run(['./build-intel-qat.sh'], check=True)
 
 
-def build_intel_ixgbe():
-    """Build Intel IXGBE"""
-    run(['./build-intel-ixgbe.sh'], check=True)
-
-
-def build_intel_ixgbevf():
-    """Build Intel IXGBEVF"""
-    run(['./build-intel-ixgbevf.sh'], check=True)
+def build_intel(driver_name: str, commit_id: str, scm_url: str):
+    """Build Intel driver from Git repository"""
+    repo_dir = Path(f'ethernet-linux-{driver_name}')
+    clone_or_update_repo(repo_dir, scm_url, commit_id)
+    run(['./build-intel-nic.sh', driver_name], check=True)
 
 
 def build_mellanox_ofed():

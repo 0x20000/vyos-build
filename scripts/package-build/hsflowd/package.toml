@@ -1,8 +1,8 @@
 [[packages]]
 name = "host-sflow"
-commit_id = "v2.0.55-1"
+commit_id = "v2.1.11-5"
 scm_url = "https://github.com/sflow/host-sflow.git"
-build_cmd = "make deb FEATURES='PCAP DROPMON DBUS PSAMPLE'"
+build_cmd = "make deb FEATURES='PCAP DROPMON DBUS PSAMPLE VPP'"
 
 [dependencies]
 packages = ["libpcap0.8-dev"]

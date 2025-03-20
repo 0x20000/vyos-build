@@ -21,7 +21,7 @@ checkiso:
 .PHONY: test
 .ONESHELL:
 test: checkiso
-	scripts/check-qemu-install --debug --configd --match="$(MATCH)" --smoketest --uefi build/live-image-amd64.hybrid.iso $(filter-out $@,$(MAKECMDGOALS))
+	scripts/check-qemu-install --debug --configd --match="$(MATCH)" --smoketest --uefi --cpu 4 --memory 8 build/live-image-amd64.hybrid.iso $(filter-out $@,$(MAKECMDGOALS))
 
 .PHONY: test-no-interfaces
 .ONESHELL:
@@ -41,7 +41,7 @@ test-vpp: checkiso
 .PHONY: testc
 .ONESHELL:
 testc: checkiso
-	scripts/check-qemu-install --debug --configd --cpu 4 --memory 8 --configtest build/live-image-amd64.hybrid.iso $(filter-out $@,$(MAKECMDGOALS))
+	scripts/check-qemu-install --debug --configd --cpu 2 --memory 7 --configtest build/live-image-amd64.hybrid.iso $(filter-out $@,$(MAKECMDGOALS))
 
 .PHONY: testraid
 .ONESHELL:

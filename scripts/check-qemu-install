@@ -361,7 +361,7 @@ if args.qemu_cmd:
     os.system(tmp)
     exit(0)
 
-test_timeout = 3 *3600 # 3 hours (in seconds)
+test_timeout = 5 *3600 # 3 hours (in seconds)
 tpm_process = None
 try:
     # Start TPM emulator

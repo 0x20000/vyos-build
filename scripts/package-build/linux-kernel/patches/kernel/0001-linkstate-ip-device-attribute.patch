@@ -88,10 +88,10 @@ index cf592d7b630f..e8915701aa73 100644
  };
  
 diff --git a/net/ipv4/devinet.c b/net/ipv4/devinet.c
-index 4822f68edbf0..ba4304144d37 100644
+index c33b1ecc591e..7576d51cd16d 100644
 --- a/net/ipv4/devinet.c
 +++ b/net/ipv4/devinet.c
-@@ -2608,6 +2608,7 @@ static struct devinet_sysctl_table {
+@@ -2609,6 +2609,7 @@ static struct devinet_sysctl_table {
  					      "route_localnet"),
  		DEVINET_SYSCTL_FLUSHING_ENTRY(DROP_UNICAST_IN_L2_MULTICAST,
  					      "drop_unicast_in_l2_multicast"),
@@ -126,7 +126,7 @@ index 8360939acf85..b13832a08d28 100644
  		.procname	= "ioam6_id",
  		.data		= &ipv6_devconf.ioam6_id,
 diff --git a/net/ipv6/route.c b/net/ipv6/route.c
-index fc5c53462025..9c9c9d51a12d 100644
+index 5715d54f3d0b..e88971b512ba 100644
 --- a/net/ipv6/route.c
 +++ b/net/ipv6/route.c
 @@ -682,6 +682,14 @@ static inline void rt6_probe(struct fib6_nh *fib6_nh)
