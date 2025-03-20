@@ -316,6 +316,8 @@ RUN if dpkg-architecture -iarm64; then \
       grub-efi-$(dpkg-architecture -qDEB_HOST_ARCH); \
     elif dpkg-architecture -iarmhf; then \
     apt-get update && apt-get install -y \
+    # Packages needed in build-image script
+      kpartx \  
       dosfstools \
       u-boot-tools \
       grub-efi-arm; \
