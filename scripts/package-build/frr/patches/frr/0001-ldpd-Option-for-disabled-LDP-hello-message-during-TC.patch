@@ -1,12 +1,14 @@
-From 9f0dc1829119ea180c2ee2ebe7dcd847556c6fda Mon Sep 17 00:00:00 2001
+From 945eff42df61982585011fa8427050c74ca90c6b Mon Sep 17 00:00:00 2001
 From: Andrii Melnychenko <a.melnychenko@vyos.io>
 Date: Mon, 17 Mar 2025 13:25:20 +0100
-Subject: [PATCH 1/1] T7226 Option for disabled LDP hello message during TCP
+Subject: [PATCH 1/1] ldpd: Option for disabled LDP hello message during TCP
 
 Added option "disable-establish-hello" that disableds
 sending additional LDP hello multicast messages during
 TCP session establishment.
 This option enables per interface: "(config-ldp-af-if)".
+
+Signed-off-by: Andrii Melnychenko <a.melnychenko@vyos.io>
 ---
  ldpd/interface.c    |  2 ++
  ldpd/ldp_vty.h      |  1 +
@@ -154,7 +156,7 @@ index ad831a6ea..40a1e8c3c 100644
  
  struct iface_ldp_sync {
 diff --git a/ldpd/neighbor.c b/ldpd/neighbor.c
-index 2596c7948..b9199f0d9 100644
+index 2596c7948..00a809186 100644
 --- a/ldpd/neighbor.c
 +++ b/ldpd/neighbor.c
 @@ -630,8 +630,9 @@ nbr_establish_connection(struct nbr *nbr)
@@ -163,7 +165,7 @@ index 2596c7948..b9199f0d9 100644
  	RB_FOREACH(adj, nbr_adj_head, &nbr->adj_tree)
 -		send_hello(adj->source.type, adj->source.link.ia,
 -		    adj->source.target);
-+		if (!adj->source.link.ia->disable_establish_hello)
++		if (!(adj->source.type == HELLO_LINK && adj->source.link.ia->disable_establish_hello))
 +			send_hello(adj->source.type, adj->source.link.ia,
 +				adj->source.target);
  
