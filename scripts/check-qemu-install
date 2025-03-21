@@ -399,6 +399,16 @@ try:
     loginVM(c, log)
 
     #################################################
+    # Check for no private key contents within the image
+    #################################################
+    msg = 'Found private key - bailing out'
+    c.sendline(f'if sudo grep -rq "BEGIN PRIVATE KEY" /var/lib/shim-signed/mok; then echo {msg}; exit 1; fi')
+    tmp = c.expect([f'\n{msg}', op_mode_prompt])
+    if tmp == 0:
+        log.error(msg)
+        exit(1)
+
+    #################################################
     # Installing into VyOS system
     #################################################
     log.info('Starting installer')
@@ -879,7 +889,7 @@ except pexpect.exceptions.ExceptionPexpect:
     EXCEPTION = 1
 
 except Exception:
-    log.error('Unknown error occured while VyOS!')
+    log.error('Unknown error occured!')
     traceback.print_exc()
     EXCEPTION = 1
 

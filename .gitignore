@@ -1,11 +1,12 @@
+.build/config
 build/*
+config/*
 *.pyc
 packer_build/*
 packer_cache/*
 key/*
 packages/*
 !packages/*/
-data/live-build-config/includes.chroot/var/lib/shim-signed/mok/*
 /testinstall*.img
 /testinstall*.efivars
 /*.qcow2

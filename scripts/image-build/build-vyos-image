@@ -367,6 +367,11 @@ if __name__ == "__main__":
     shutil.copytree("data/live-build-config/", lb_config_dir)
     os.makedirs(lb_config_dir, exist_ok=True)
 
+    ## Secure Boot - Copy public Keys to image
+    sb_certs = 'data/certificates'
+    if os.path.isdir(sb_certs):
+        shutil.copytree(sb_certs, f'{lb_config_dir}/includes.chroot/var/lib/shim-signed/mok')
+
     # Switch to the build directory, this is crucial for the live-build work
     # because the efective build config files etc. are there.
     #
@@ -611,6 +616,7 @@ DOCUMENTATION_URL="{build_config['documentation_url']}"
         ## Configure live-build
         lb_config_tmpl = jinja2.Template("""
         lb config noauto \
+                --no-color \
                 --apt-indices false \
                 --apt-options "--yes -oAPT::Get::allow-downgrades=true" \
                 --apt-recommends false \

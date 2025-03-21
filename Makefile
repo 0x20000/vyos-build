@@ -79,7 +79,7 @@ clean:
 	rm -f config/binary config/bootstrap config/chroot config/common config/source
 	rm -f build.log
 	rm -f vyos-*.iso
-	rm -f *.img
+	rm -f *.img *.efivars
 	rm -f *.xz
 	rm -f *.vhd
 	rm -f *.raw
