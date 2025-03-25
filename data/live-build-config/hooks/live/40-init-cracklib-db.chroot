@@ -1,0 +1,13 @@
+#!/bin/sh
+
+CRACKLIB_DIR=/var/cache/cracklib
+CRACKLIB_DB=cracklib_dict
+
+if [ ! -f "${CRACKLIB_DIR}/${CRACKLIB_DB}.pwd" ]; then
+  echo "I: Creating the cracklib database ${CRACKLIB_DIR}/${CRACKLIB_DB}"
+  mkdir -p $CRACKLIB_DIR
+
+  /usr/sbin/create-cracklib-dict -o $CRACKLIB_DIR/$CRACKLIB_DB \
+    /usr/share/dict/cracklib-small
+fi
+
