@@ -22,7 +22,6 @@ commit_id = "1.13.0"
 scm_url = "https://github.com/accel-ppp/accel-ppp.git"
 build_cmd = "build_accel_ppp"
 
-
 [[packages]]
 name = "ovpn-dco"
 commit_id = "v0.2.20231117"
@@ -34,7 +33,6 @@ name = "nat-rtsp"
 commit_id = "475af0a"
 scm_url = "https://github.com/maru-sama/rtsp-linux.git"
 build_cmd = "build_nat_rtsp"
-
 
 [[packages]]
 name = "qat"
@@ -77,3 +75,9 @@ name = "realtek-r8152"
 commit_id = ""
 scm_url = ""
 build_cmd = "build_realtek_r8152"
+
+[[packages]]
+name = "ipt-netflow"
+commit_id = "0eb2092e93"
+scm_url = "https://github.com/aabc/ipt-netflow"
+build_cmd = "build_ipt_netflow"

@@ -143,6 +143,8 @@ def build_package(package: dict, dependencies: list) -> None:
             build_realtek_r8152()
         elif package['build_cmd'] == 'build_jool':
             build_jool()
+        elif package['build_cmd'] == 'build_ipt_netflow':
+            build_ipt_netflow(package['commit_id'], package['scm_url'])
         elif package['build_cmd'] == 'build_openvpn_dco':
             build_openvpn_dco(package['commit_id'], package['scm_url'])
             create_tarball(f'{package["name"]}-{package["commit_id"]}', f'{package["name"]}')
@@ -238,6 +240,11 @@ def build_jool():
     """Build Jool"""
     run(['echo y | ./build-jool.py'], check=True, shell=True)
 
+def build_ipt_netflow(commit_id, scm_url):
+    """Build ipt_NETFLOW"""
+    repo_dir = Path('ipt-netflow')
+    clone_or_update_repo(repo_dir, scm_url, commit_id)
+    run(['./build-ipt-netflow.sh'], check=True, shell=True)
 
 def build_openvpn_dco(commit_id, scm_url):
     """Build OpenVPN DCO"""
