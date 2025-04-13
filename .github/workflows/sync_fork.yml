@@ -8,7 +8,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      actions: write
     steps:
       - run: gh repo sync $REPOSITORY -b $BRANCH_NAME
         env:
