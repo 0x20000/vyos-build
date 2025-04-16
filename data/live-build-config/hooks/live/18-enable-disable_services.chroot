@@ -72,6 +72,8 @@ systemctl disable suricata.service
 systemctl disable vyconfd.service
 systemctl disable vpp.service
 systemctl disable vyos-commitd.service
+systemctl disable netplug.service
+
 
 echo I: Enabling services
 systemctl enable vyos-hostsd.service
