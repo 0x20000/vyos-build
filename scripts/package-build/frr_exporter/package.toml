@@ -1,6 +1,6 @@
 [[packages]]
 name = "frr_exporter"
-commit_id = "v1.3.1"
+commit_id = "v1.5.0"
 scm_url = "https://github.com/tynany/frr_exporter"
 
 build_cmd = """

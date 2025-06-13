@@ -1,6 +1,6 @@
 [[packages]]
 name = "node_exporter"
-commit_id = "v1.8.2"
+commit_id = "v1.9.1"
 scm_url = "https://github.com/prometheus/node_exporter"
 
 build_cmd = """

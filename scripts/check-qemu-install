@@ -97,6 +97,8 @@ parser.add_argument('--qemu-cmd', help='Only generate QEMU launch command',
                 action='store_true', default=False)
 parser.add_argument('--cpu', help='Set QEMU CPU', type=int, default=2)
 parser.add_argument('--memory', help='Set QEMU memory', type=int, default=4)
+parser.add_argument('--vyconf', help='Execute testsuite with vyconfd', action='store_true',
+                    default=False)
 
 args = parser.parse_args()
 
@@ -804,6 +806,11 @@ try:
             # remove interface tests as they consume a lot of time
             c.sendline('sudo rm -f /usr/libexec/vyos/tests/smoke/cli/test_interfaces_*')
             c.expect(op_mode_prompt)
+
+        if args.vyconf:
+            c.sendline('sudo /usr/libexec/vyos/set_vyconf_backend.py --no-prompt &> /dev/null')
+            c.expect(op_mode_prompt)
+            log.info('Smoketests will be run using vyconfd/vyos-commitd')
 
         log.info('Executing VyOS smoketests')
         c.sendline('/usr/bin/vyos-smoketest')

@@ -7,14 +7,14 @@ debian_distribution = "bookworm"
 debian_mirror = "http://deb.debian.org/debian"
 debian_security_mirror = "http://deb.debian.org/debian-security"
 
-debian_archive_areas = "main,contrib,non-free,non-free-firmware"
+debian_archive_areas = "main contrib non-free non-free-firmware"
 
 vyos_mirror = "https://packages.vyos.net/repositories/current"
 
 vyos_branch = "current"
 release_train = "current"
 
-kernel_version = "6.6.79"
+kernel_version = "6.6.93"
 kernel_flavor = "vyos"
 bootloaders = "syslinux,grub-efi"
 

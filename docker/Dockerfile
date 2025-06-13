@@ -90,6 +90,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
       openssh-client \
       jq \
       socat \
+      python-is-python3 \
       && rm -rf /var/lib/apt/lists/*
 
 # Packages needed for vyos-build
@@ -112,6 +113,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
       gdisk \
       sbsigntool \
       dosfstools \
+      kpartx \
       && rm -rf /var/lib/apt/lists/*
 
 # Packages for TPM test
@@ -127,9 +129,10 @@ RUN if dpkg-architecture -ii386 || dpkg-architecture -iamd64; then \
 
 # Building libvyosconf requires a full configured OPAM/OCaml setup
 RUN apt-get update && apt-get install -y --no-install-recommends \
+      quilt \
       debhelper \
       libffi-dev \
-      libpcre3-dev \
+      libpcre2-dev \
       unzip \
       && rm -rf /var/lib/apt/lists/*
 
@@ -140,17 +143,15 @@ RUN dpkg-reconfigure ca-certificates; \
       echo "cacert=/etc/ssl/certs/ca-certificates.crt" >> ~/.curlrc; \
     fi
 
-# Installing OCAML needed to compile libvyosconfig
+# Installing OCaml needed to compile libvyosconfig
 RUN curl https://raw.githubusercontent.com/ocaml/opam/master/shell/install.sh \
       --output /tmp/opam_install.sh --retry 10 --retry-delay 5 && \
     sed -i 's/read_tty BINDIR/BINDIR=""/' /tmp/opam_install.sh && sh /tmp/opam_install.sh && \
     opam init --root=/opt/opam --comp=${OCAML_VERSION} --disable-sandboxing --no-setup
 
-RUN eval $(opam env --root=/opt/opam --set-root) && \
-    opam pin add pcre https://github.com/mmottl/pcre-ocaml.git#0c4ca03a -y
-
 RUN eval $(opam env --root=/opt/opam --set-root) && opam install -y \
       re \
+      pcre2 \
       num \
       ctypes \
       ctypes-foreign \
@@ -242,6 +243,7 @@ RUN pip install --break-system-packages \
       git+https://github.com/aristanetworks/j2lint.git@341b5d5db86 \
       pyhumps==3.8.0; \
     apt-get update && apt-get install -y --no-install-recommends \
+      build-essential \
       dh-python \
       fakeroot \
       iproute2 \
@@ -297,7 +299,6 @@ RUN if dpkg-architecture -ii386 || dpkg-architecture -iamd64; then \
 # This is only supported on i386 and amd64 platforms
 RUN if dpkg-architecture -ii386 || dpkg-architecture -iamd64; then \
      apt-get update && apt-get install -y --no-install-recommends \
-      kpartx \
       parted \
       udev \
       grub-pc \

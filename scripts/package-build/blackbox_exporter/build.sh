@@ -32,7 +32,7 @@ EOF
 
 echo "I: Create $SRC/debian/changelog"
 cat <<EOF > debian/changelog
-blackbox-exporter (0.25.0) UNRELEASED; urgency=medium
+blackbox-exporter (0.26.0) UNRELEASED; urgency=medium
 
   * Upstream package
 
