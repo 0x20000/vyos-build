@@ -64,8 +64,8 @@ jobs:
         id: push
         uses: docker/build-push-action@v6
         with:
-          context: source
-          file: docker/Dockerfile
+          context: ./source
+          file: ./source/docker/Dockerfile
           push: true
           platforms: ${{ matrix.platform }}
           cache-from: type=registry,ref=ghcr.io/${{ github.repository }}:rolling
