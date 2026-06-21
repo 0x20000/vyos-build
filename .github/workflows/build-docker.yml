@@ -64,7 +64,7 @@ jobs:
         id: push
         uses: docker/build-push-action@v6
         with:
-          context: ./source
+          context: ./source/docker
           file: ./source/docker/Dockerfile
           push: true
           platforms: ${{ matrix.platform }}
