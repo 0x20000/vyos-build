@@ -17,7 +17,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: patch
-          depth: 0
+          fetch-depth: 0
       - name: Sync rolling and detect docker changes
         id: detect
         shell: bash
