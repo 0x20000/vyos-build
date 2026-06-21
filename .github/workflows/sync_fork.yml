@@ -11,7 +11,6 @@ jobs:
     permissions:
       contents: write
       actions: write
-      workflow: write
     steps:
       - name: Checkout rolling source
         uses: actions/checkout@v4
