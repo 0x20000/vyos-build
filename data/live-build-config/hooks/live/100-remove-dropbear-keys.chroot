@@ -1,7 +1,0 @@
-#!/bin/sh
-
-# Delete Dropbear SSH keys that might be generated
-# by postinst scripts
-# to prevent non-unique keys from appearing in images
-
-rm -f /etc/dropbear/dropbear_*_host_key

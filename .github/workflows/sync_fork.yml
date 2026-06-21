@@ -5,13 +5,28 @@ on:
   workflow_dispatch: { }
 jobs:
   sync:
+    outputs:
+      should_build: ${{ steps.detect.outputs.should_build }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
       actions: write
     steps:
-      - run: gh repo sync $REPOSITORY -b $BRANCH_NAME
+      - name: Sync rolling and detect docker changes
+        id: detect
+        shell: bash
+        run: |
+          bash .github/workflows/script/sync-and-detect-docker-changes.sh \
+            "$REPOSITORY" \
+            "$BRANCH_NAME" \
+            "$GITHUB_OUTPUT"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPOSITORY: ${{ github.repository }}
-          BRANCH_NAME: ${{ github.ref_name }}
+          BRANCH_NAME: rolling
+
+  build:
+    needs: sync
+    if: needs.sync.outputs.should_build == 'true'
+    uses: ./.github/workflows/build-docker.yml
+    secrets: inherit
